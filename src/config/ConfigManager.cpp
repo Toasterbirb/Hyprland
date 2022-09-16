@@ -48,7 +48,7 @@ void CConfigManager::setDefaultVars() {
     configValues["general:no_cursor_warps"].intValue = 0;
 
     configValues["general:layout"].strValue = "dwindle";
-    
+
     configValues["misc:disable_hyprland_logo"].intValue = 0;
     configValues["misc:disable_splash_rendering"].intValue = 0;
     configValues["misc:no_vfr"].intValue = 1;
@@ -86,6 +86,9 @@ void CConfigManager::setDefaultVars() {
     configValues["decoration:col.shadow_inactive"].intValue = INT_MAX;
     configValues["decoration:dim_inactive"].intValue = 0;
     configValues["decoration:dim_strength"].floatValue = 0.5f;
+	configValues["decoration:wallpaper_path"].strValue = "/usr/share/hyprland/wall_2K.png";
+	configValues["decoration:wallpaper_width"].intValue = 1920;
+	configValues["decoration:wallpaper_height"].intValue = 1080;
 
     configValues["dwindle:pseudotile"].intValue = 0;
     configValues["dwindle:col.group_border"].intValue = 0x66777700;
@@ -205,7 +208,7 @@ void CConfigManager::setDefaultAnimationVars() {
         // workspaces
         INITANIMCFG("specialWorkspace");
     }
-    
+
     // init the values
     animationConfig["global"] = {
         false,
@@ -236,7 +239,7 @@ void CConfigManager::setDefaultAnimationVars() {
 }
 
 void CConfigManager::init() {
-    
+
     loadConfigLoadVars();
 
     const char* const ENVHOME = getenv("HOME");
@@ -589,7 +592,7 @@ void CConfigManager::handleAnimation(const std::string& command, const std::stri
 
     // anim name
     const auto ANIMNAME = curitem;
-    
+
     const auto PANIM = animationConfig.find(ANIMNAME);
 
     if (PANIM == animationConfig.end()) {
@@ -717,7 +720,7 @@ void CConfigManager::handleBind(const std::string& command, const std::string& v
         else
             g_pKeybindManager->addKeybind(SKeybind{KEY, -1, MOD, HANDLER, COMMAND, locked, m_szCurrentSubmap, release, repeat});
     }
-        
+
 }
 
 void CConfigManager::handleUnbind(const std::string& command, const std::string& value) {
@@ -732,7 +735,7 @@ void CConfigManager::handleUnbind(const std::string& command, const std::string&
 }
 
 bool windowRuleValid(const std::string& RULE) {
-    return !(RULE != "float" 
+    return !(RULE != "float"
         && RULE != "tile"
         && RULE.find("opacity") != 0
         && RULE.find("move") != 0
@@ -858,7 +861,7 @@ void CConfigManager::handleDefaultWorkspace(const std::string& command, const st
 }
 
 void CConfigManager::handleSubmap(const std::string& command, const std::string& submap) {
-    if (submap == "reset") 
+    if (submap == "reset")
         m_szCurrentSubmap = "";
     else
         m_szCurrentSubmap = submap;
@@ -1027,9 +1030,9 @@ void CConfigManager::parseLine(std::string& line) {
 
         if (LASTSEP == std::string::npos || currentCategory.contains("device"))
             currentCategory = "";
-        else 
+        else
             currentCategory = currentCategory.substr(0, LASTSEP);
-        
+
         return;
     }
 
@@ -1054,7 +1057,7 @@ void CConfigManager::loadConfigLoadVars() {
     Debug::log(LOG, "Reloading the config!");
     parseError = "";       // reset the error
     currentCategory = "";  // reset the category
-    
+
     // reset all vars before loading
     setDefaultVars();
     m_dMonitorRules.clear();
@@ -1083,7 +1086,7 @@ void CConfigManager::loadConfigLoadVars() {
     }
 
     configPaths.push_back(CONFIGPATH);
- 
+
     std::ifstream ifs;
     ifs.open(CONFIGPATH);
 
@@ -1195,7 +1198,7 @@ void CConfigManager::loadConfigLoadVars() {
         // Force the compositor to fully re-render all monitors
         m->forceFullFrames = 2;
     }
-    
+
     // Reset no monitor reload
     m_bNoMonitorReload = false;
 }

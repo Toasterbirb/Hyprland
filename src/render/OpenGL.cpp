@@ -1150,19 +1150,15 @@ void CHyprOpenGLImpl::createBGTextureForMonitor(CMonitor* pMonitor) {
     if (!std::filesystem::exists("/usr/share/hyprland/wall_8K.png"))
         return; // the texture will be empty, oh well. We'll clear with a solid color anyways.
 
-    // get the adequate tex
-    std::string texPath = "/usr/share/hyprland/wall_";
-    Vector2D textureSize;
-    if (pMonitor->vecTransformedSize.x > 3850) {
-        textureSize = Vector2D(7680, 4320);
-        texPath += "8K.png";
-    } else if (pMonitor->vecTransformedSize.x > 1930) {
-        textureSize = Vector2D(3840, 2160);
-        texPath += "4K.png";
-    } else {
-        textureSize = Vector2D(1920, 1080);
-        texPath += "2K.png";
-    }
+
+	std::string texPath = g_pConfigManager->getString("decoration:wallpaper_path");
+
+	if (!std::filesystem::exists(texPath))
+		Debug::log(ERR, "Wallpaper path points to a non-existant file: %s", texPath);
+
+	Vector2D textureSize;
+	textureSize.x = (double)g_pConfigManager->getInt("decoration:wallpaper_width");
+	textureSize.y = (double)g_pConfigManager->getInt("decoration:wallpaper_height");
 
     PTEX->m_vSize = textureSize;
 
